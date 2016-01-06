@@ -21,9 +21,3 @@ with open("simple_data", 'w') as f:
 		f.write("\n")
 
 
-
-		
-
-print data
-print label
-
