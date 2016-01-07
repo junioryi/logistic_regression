@@ -9,18 +9,15 @@ epsilon = 0.01; % Stopping Condition
 % Read sparse matrix format
 [label_vector, instance_matrix] = libsvmread( data_file );
 
-num_feature = size(instance_matrix, 1);
-w = zeros(1, num_feature);
-w(1) = 1;
-w(2) = 1;
-
-[ col_num, row_num ] = size( instance_matrix );
+[ row_num, col_num ] = size( instance_matrix );
+w = zeros(1, col_num);
 % Compute the w.T dot x, will use several time later.
-weights = sum( instance_matrix .* (repmat(w, col_num, 1)), 2 );
+weights = sum( instance_matrix .* (repmat(w, row_num, 1)), 2 );
 
 % For stopping condition
 [ gw0 ] = gradient_of_w(instance_matrix, label_vector, w, weights, C);
 norm_gw0 = norm(gw0);
+likelihood(label_vector, weights);
 
 for i = 1:100
 
@@ -36,11 +33,12 @@ for i = 1:100
 	disp(cost);
 
 	if norm(gw) <= epsilon * norm_gw0 
-		disp(norm(gw));
-		disp(norm_gw0);
+		disp('Meet stopping condition.');
 		break;
 	end
 end
+
+likelihood(label_vector, weights);
 
 fclose(fileID);
 
