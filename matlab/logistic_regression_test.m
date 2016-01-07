@@ -15,12 +15,14 @@ w(2) = 1;
 
 [ col_num, row_num ] = size( instance_matrix );
 % Compute the w.T dot x, will use several time later.
-w_dot_x = sum( instance_matrix .* (repmat(w, col_num, 1)), 2 );
+weights = sum( instance_matrix .* (repmat(w, col_num, 1)), 2 );
 
-% Compute the gradient of f
-[ gw   ] = gradient_of_w(instance_matrix, label_vector, w, w_dot_x, C);
-[ cost ] = cost_func(w, C, w_dot_x, label_vector);
-[ ak   ] = find_ak(w, gw, eta);
+% Compute the gradient of f.
+[ gw   ] = gradient_of_w(instance_matrix, label_vector, w, weights, C);
+% Compute cost value given w.
+[ cost ] = cost_func(w, C, weights, label_vector);
+% Find ak using line search.
+[ ak   ] = find_ak(instance_matrix, w, weights, gw, cost, C, eta, label_vector);
 
 fclose(fileID);
 
