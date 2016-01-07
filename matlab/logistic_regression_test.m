@@ -1,6 +1,7 @@
 fileID = fopen('output', 'w');
 
-[label_vector, instance_matrix] = libsvmread('simple_data');
+data_file = '../data/simple_data'
+[label_vector, instance_matrix] = libsvmread( data_file );
 
 % To display full matrix
 %{ 
@@ -9,10 +10,11 @@ disp(A);
 %}
 
 C = 0.1;
-num_feature = size(instance_matrix, 1)
+num_feature = size(instance_matrix, 1);
 w = zeros(1, num_feature);
+w(1) = 1;
+w(2) = 1;
 [ gw ] = gradient_of_w(instance_matrix, label_vector, w, C);
-disp(gw);
 
 %formatSpec = 'Instance label: %d, features: \n';
 %out = sprintf(formatSpec, label_vector);
