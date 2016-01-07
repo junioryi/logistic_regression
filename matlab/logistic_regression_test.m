@@ -18,9 +18,9 @@ w(2) = 1;
 w_dot_x = sum( instance_matrix .* (repmat(w, col_num, 1)), 2 );
 
 % Compute the gradient of f
-[ gw ] = gradient_of_w(instance_matrix, label_vector, w, w_dot_x, C);
-disp(gw);
-[ ak ] = find_ak(w, gw, eta);
+[ gw   ] = gradient_of_w(instance_matrix, label_vector, w, w_dot_x, C);
+[ cost ] = cost_func(w, C, w_dot_x, label_vector);
+[ ak   ] = find_ak(w, gw, eta);
 
 fclose(fileID);
 
