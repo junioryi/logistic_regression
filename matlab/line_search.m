@@ -1,4 +1,4 @@
-function [ a_k, new_weight ] = find_ak(x, w, weights, grad_w, old_cost, C, eta, labels )
+function [ a_k, new_weight ] = line_search(x, w, weights, grad_w, old_cost, C, eta, labels )
 %% Find a_k to update w
 %%  f(w^k + a_k * s^k) <= 
 %%      f(w^k) + eta * a_k grad(f(w^k)).T * s^k

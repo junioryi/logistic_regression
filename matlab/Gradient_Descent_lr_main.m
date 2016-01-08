@@ -26,7 +26,7 @@ for i = 1:100
 	% Compute cost value given w.
 	[ cost ] = cost_func(w, C, weights, label_vector);
 	% Find ak using line search.
-	[ ak, new_weights ] = find_ak(instance_matrix, w, weights, gw, cost, C, eta, label_vector);
+	[ ak, new_weights ] = line_search(instance_matrix, w, weights, gw, cost, C, eta, label_vector);
 	% Update w
 	w = w - ak * gw;
 	weights = new_weights;
