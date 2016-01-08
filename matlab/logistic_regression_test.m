@@ -4,20 +4,20 @@ fileID = fopen('output', 'w');
 data_file = '../data/simple_data';
 C       = 0.1;
 eta     = 0.1;
-epsilon = 0.01; % Stopping Condition
+epsilon = 0.00001; % Stopping Condition
 
 % Read sparse matrix format
-[label_vector, instance_matrix] = libsvmread( data_file );
+[ label_vector, instance_matrix ] = libsvmread( data_file );
+label_vector(label_vector == 0) = -1;
 
 [ row_num, col_num ] = size( instance_matrix );
 w = zeros(1, col_num);
-% Compute the w.T dot x, will use several time later.
-weights = sum( instance_matrix .* (repmat(w, row_num, 1)), 2 );
+% Compute the w.T dot x, will use it several time later.
+weights = sum( instance_matrix .* (repmat(w, row_num, 1)), 2);
 
 % For stopping condition
 [ gw0 ] = gradient_of_w(instance_matrix, label_vector, w, weights, C);
 norm_gw0 = norm(gw0);
-likelihood(label_vector, weights);
 
 for i = 1:100
 
@@ -30,7 +30,6 @@ for i = 1:100
 	% Update w
 	w = w - ak * gw;
 	weights = new_weights;
-	disp(cost);
 
 	if norm(gw) <= epsilon * norm_gw0 
 		disp('Meet stopping condition.');
@@ -38,7 +37,13 @@ for i = 1:100
 	end
 end
 
-likelihood(label_vector, weights);
+[ predictions ] = predict(instance_matrix, weights);
+label_vector(label_vector==-1) = 0;
+correct = bsxfun(@eq, label_vector, predictions);
+percent = sum(correct);
+accuracy = percent / (1.0 * size(correct, 1));
+disp('Accuracy:');
+disp(accuracy);
 
 fclose(fileID);
 
