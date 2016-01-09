@@ -1,4 +1,4 @@
-function [ w ] = logReg_Newton(x, y, C, eps, ksi, eta)
+function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 	n = size(y, 1);
 	l = size(x, 2);
 	Y = spdiags(y, 0, n, n);
@@ -7,6 +7,7 @@ function [ w ] = logReg_Newton(x, y, C, eps, ksi, eta)
 	w = zeros(l, 1);
 
 	outter_iter = 1;
+	t = cputime;
 	while true,
 		fprintf('Iteration: %d, ', outter_iter);
 		
@@ -70,6 +71,7 @@ function [ w ] = logReg_Newton(x, y, C, eps, ksi, eta)
 		outter_iter = outter_iter + 1;
 		fprintf('\n');
 	end
+	e = cputime - t;
 
 
 
