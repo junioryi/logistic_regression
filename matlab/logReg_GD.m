@@ -1,6 +1,6 @@
 function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
-	fileID = fopen('lr_Newton.out', 'w');
-	formatSpec = 'Iteration: %d, accuracy= %f, f= %f, alpha: %f, inc=%d, time: %f\n';
+	fileID = fopen('lr_gd.out', 'w');
+	formatSpec = 'Iteration: %d, accuracy= %f, f= %f, alpha: %f, time: %f\n';
 	n = size(y, 1);
 	l = size(x, 2);
 	Y = spdiags(y, 0, n, n);
@@ -17,8 +17,8 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 		exp_wxs = exp(-wxs);
 		Pminus1 = exp_wxs ./ (1+exp_wxs);
 		pyx_left = spdiags(Pminus1, 0, n, n);
-		hessianD = Pminus1./ (1+exp_wxs);
-		D = spdiags(hessianD, 0, n, n);
+		%hessianD = Pminus1./ (1+exp_wxs);
+		%D = spdiags(hessianD, 0, n, n);
 
 		% Compute gradient of w
 		gw  = w + C * sum(pyx_left * -X)';
@@ -29,6 +29,7 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 			break;
 		end
 	
+		%{
 		% Conjugate gradient
 		s = zeros(l, 1);
 		r = -gw;
@@ -48,10 +49,12 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 			d = r + beta * d;
 			inner_iter = inner_iter + 1;
 		end
+		%}
 
 		%fprintf('# inner iteration: %d, ', inner_iter);
 
 		% Line search
+		s = -gw;
 		ak = 1;
 		s_x = X * s;
 		gw_s = eta * gw' * s;
@@ -74,7 +77,7 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 		predict = sign(x * w);
 		accuracy = sum(predict == y) / n;
 
-		fprintf(fileID, formatSpec, outter_iter, accuracy, fval, ak, inner_iter, e);
+		fprintf(fileID, formatSpec, outter_iter, accuracy, fval, ak, e);
 	end
 	e = cputime - t;
 	fclose(fileID);
