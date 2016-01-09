@@ -1,6 +1,6 @@
 function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 	fileID = fopen('output', 'w');
-	formatSpec = 'Iteration: %d, f= %f, alpha: %f, inc=%d, time: %f\n';
+	formatSpec = 'Iteration: %d, accuracy= %f, f= %f, alpha: %f, inc=%d, time: %f\n';
 	n = size(y, 1);
 	l = size(x, 2);
 	Y = spdiags(y, 0, n, n);
@@ -25,9 +25,6 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 		normgw  = norm(gw);
 		fval = 0.5 * norm(w)^2 + C * sum(log( 1 + exp(-wxs)));
 
-		predict  = sign(x*w);
-		accuracy = sum(y == predict) / n;
-		%fprintf(', Accuracy: %f\n', accuracy);
 		if (normgw <= eps * norm_g0)
 			break;
 		end
@@ -74,7 +71,10 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 		%fprintf('\n');
 		e = cputime - t;
 
-		fprintf(fileID, formatSpec, outter_iter, fval, ak, inner_iter, e);
+		predict = sign(x * w);
+		accuracy = sum(predict == y) / n;
+
+		fprintf(fileID, formatSpec, outter_iter, accuracy, fval, ak, inner_iter, e);
 	end
 	e = cputime - t;
 	fclose(fileID);
