@@ -7,7 +7,10 @@ sk = zeros(size(gw, 2), 1);
 rk = -gw;
 dk = rk;
 
-Dii = exp( -labels .* weights ) ./ ( ones(size(weights)) + exp(-labels .* weights) ).^2;
+%Dii = exp( -labels .* weights ) ./ ( ones(size(weights)) + exp(-labels .* weights) ).^2;
+exp_ywx = exp(-labels .* weights);
+Dii_deno = bsxfun(@plus, exp_ywx, 1);
+Dii = bsxfun(@rdivide, exp_ywx, Dii_deno.^2);
 D = sparse(1:l, 1:l, Dii, l, l);
 
 MT = transpose(M);
