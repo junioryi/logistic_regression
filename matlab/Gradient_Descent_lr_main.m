@@ -2,10 +2,10 @@ fileID = fopen('output', 'w');
 
 % Variables
 data_file = '../data/simple_data';
+eta     = 0.01;
 C       = 0.1;
-eta     = 0.1;
 xi      = 0.1;
-epsilon = 0.00001; % Stopping Condition
+epsilon = 0.01; % Stopping Condition
 
 % Read sparse matrix format
 [ label_vector, instance_matrix ] = libsvmread( data_file );
@@ -20,6 +20,8 @@ weights = sum( instance_matrix .* (repmat(w, row_num, 1)), 2);
 [ gw0 ] = gradient_of_w(instance_matrix, label_vector, w, weights, C);
 norm_gw0 = norm(gw0);
 
+formatSpec = 'Iteration: %d, objective function value: %f\n';
+
 for i = 1:100
 
 	% Compute the gradient of f.
@@ -32,6 +34,8 @@ for i = 1:100
 	% Update w
 	w = w - ak * sk;
 	weights = new_weights;
+
+	fprintf(fileID, formatSpec, i, cost);
 
 	if norm(gw) <= epsilon * norm_gw0 
 		disp('Meet stopping condition.');
