@@ -4,6 +4,7 @@ fileID = fopen('output', 'w');
 data_file = '../data/simple_data';
 C       = 0.1;
 eta     = 0.1;
+xi      = 0.1;
 epsilon = 0.00001; % Stopping Condition
 
 % Read sparse matrix format
@@ -23,12 +24,13 @@ for i = 1:100
 
 	% Compute the gradient of f.
 	[ gw   ] = gradient_of_w(instance_matrix, label_vector, w, weights, C);
+	[ sk   ] = conjugate_gradient(instance_matrix, gw, weights, label_vector, C, xi);
 	% Compute cost value given w.
 	[ cost ] = cost_func(w, C, weights, label_vector);
 	% Find ak using line search.
-	[ ak, new_weights ] = line_search(instance_matrix, w, weights, gw, cost, C, eta, label_vector);
+	[ ak, new_weights ] = line_search(instance_matrix, w, weights, sk, cost, C, eta, label_vector);
 	% Update w
-	w = w - ak * gw;
+	w = w - ak * sk;
 	weights = new_weights;
 
 	if norm(gw) <= epsilon * norm_gw0 
