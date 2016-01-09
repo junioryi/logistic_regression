@@ -20,7 +20,9 @@ weights = sum( instance_matrix .* (repmat(w, row_num, 1)), 2);
 [ gw0 ] = gradient_of_w(instance_matrix, label_vector, w, weights, C);
 norm_gw0 = norm(gw0);
 
-formatSpec = 'Iteration: %d, objective function value: %f\n';
+formatSpec = 'Iteration: %d, objective function value: %f, time: %f\n';
+
+t = cputime;
 
 for i = 1:100
 
@@ -35,7 +37,9 @@ for i = 1:100
 	w = w - ak * sk;
 	weights = new_weights;
 
-	fprintf(fileID, formatSpec, i, cost);
+	e = cputime - t;
+
+	fprintf(fileID, formatSpec, i, cost, e);
 
 	if norm(gw) <= epsilon * norm_gw0 
 		disp('Meet stopping condition.');
