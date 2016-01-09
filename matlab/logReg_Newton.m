@@ -1,4 +1,6 @@
 function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
+	fileID = fopen('output', 'w');
+	formatSpec = 'Iteration: %d, f= %f, alpha: %f, inc=%d, time: %f\n';
 	n = size(y, 1);
 	l = size(x, 2);
 	Y = spdiags(y, 0, n, n);
@@ -9,7 +11,7 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 	outter_iter = 1;
 	t = cputime;
 	while true,
-		fprintf('Iteration: %d, ', outter_iter);
+		%fprintf('Iteration: %d, ', outter_iter);
 		
 		wxs = X * w;
 		exp_wxs = exp(-wxs);
@@ -25,7 +27,7 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 
 		predict  = sign(x*w);
 		accuracy = sum(y == predict) / n;
-		fprintf(', Accuracy: %f\n', accuracy);
+		%fprintf(', Accuracy: %f\n', accuracy);
 		if (normgw <= eps * norm_g0)
 			break;
 		end
@@ -50,7 +52,7 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 			inner_iter = inner_iter + 1;
 		end
 
-		fprintf('# inner iteration: %d, ', inner_iter);
+		%fprintf('# inner iteration: %d, ', inner_iter);
 
 		% Line search
 		ak = 1;
@@ -69,10 +71,13 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 		% Update 
 		w = w + ak * s;
 		outter_iter = outter_iter + 1;
-		fprintf('\n');
+		%fprintf('\n');
+		e = cputime - t;
+
+		fprintf(fileID, formatSpec, outter_iter, fval, ak, inner_iter, e);
 	end
 	e = cputime - t;
-
+	fclose(fileID);
 
 
 

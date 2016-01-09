@@ -7,11 +7,11 @@ C   = 0.1;
 ksi = 0.1;
 eps = 0.01;
 
-fprintf('\nStart reading data...\n');
+%fprintf('\nStart reading data...\n');
 [ y, x ] = libsvmread( data_file );
-fprintf('Finish reading data.\n');
+%fprintf('Finish reading data.\n');
 y = 2*y-1;
 
 [ w, t, n ] = logReg_Newton(x, y, C, eps, ksi, eta);
-fprintf('Total iteration: %d, total time: %f\n', n, t);
+%fprintf('Total iteration: %d, total time: %f\n', n, t);
 
