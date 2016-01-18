@@ -15,8 +15,9 @@ y = 2*y-1;
 t = cputime;
 [ w, t, n ] = logReg_Newton(x, y, C, eps, ksi, eta);
 e1 = cputime - t;
-fprintf('Newton done.\n  Total iteration: %d, time: %f\n', n, t);
+fprintf(fileID, 'Newton done.\n  Total iteration: %d, time: %f\n', n, t);
 [ w, t, n ] = logReg_GD(x, y, C, eps, ksi, eta);
 e2 = cputime - e1; 
-fprintf('Gradient Descent done.\n  Total iteration: %d, time: %f\n', n, t);
+fprintf(fileID, 'Gradient Descent done.\n  Total iteration: %d, time: %f\n', n, t);
+exit;
 

@@ -1,8 +1,8 @@
 fileID = fopen('output', 'w');
 
 % Variables
-data_file = '../data/simple_data';
-%data_file = '../data/kddb';
+%data_file = '../data/simple_data';
+data_file = '/tmp2/r03222055/kddb';
 eta     = 0.01;
 C       = 0.1;
 xi      = 0.1;
@@ -61,7 +61,7 @@ disp('Accuracy:');
 disp(accuracy);
 
 fclose(fileID);
-%exit;
+exit;
 
 
 

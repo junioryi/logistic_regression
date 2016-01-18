@@ -15,7 +15,7 @@ D = sparse(1:l, 1:l, Dii, l, l);
 
 MT = transpose(M);
 
-for i = 1:100
+for i = 1:100000
 	norm_r = norm(rk);
 	if norm_r <= xi * norm(gw)
 		break

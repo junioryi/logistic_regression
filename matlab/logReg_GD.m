@@ -70,7 +70,6 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 		
 		% Update 
 		w = w + ak * s;
-		outter_iter = outter_iter + 1;
 		%fprintf('\n');
 		e = cputime - t;
 
@@ -78,6 +77,7 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 		accuracy = sum(predict == y) / n;
 
 		fprintf(fileID, formatSpec, outter_iter, accuracy, fval, ak, e);
+		outter_iter = outter_iter + 1;
 	end
 	e = cputime - t;
 	fclose(fileID);

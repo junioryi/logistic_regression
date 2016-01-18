@@ -11,8 +11,8 @@ denominator = bsxfun(@plus, exp(-1*multiply_label), 1);
 left_sum = bsxfun(@minus, denominator.^-1, 1);
 
 %total_sum = repmat(left_sum .* labels, 1, size(M, 2)) .* M;
-total_sum = bsxfun(@times, M, left_sum .* labels);
-gw = w + C * sum( total_sum );
+%total_sum = bsxfun(@times, M, left_sum .* labels);
+gw = w + C * sum( bsxfun(@times, M, left_sum .* labels) );
 end
 
 

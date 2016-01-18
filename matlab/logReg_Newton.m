@@ -1,6 +1,6 @@
 function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 	fileID = fopen('lr_Newton.out', 'w');
-	formatSpec = 'Iteration: %d, accuracy= %f, f= %f, alpha: %f, inc=%d, time: %f\n';
+	formatSpec = 'Iteration: %d, f= %f, |g|=%f, cg loop=%d, step size=%f, time: %f\n';
 	n = size(y, 1);
 	l = size(x, 2);
 	Y = spdiags(y, 0, n, n);
@@ -67,14 +67,14 @@ function [ w, e, outter_iter ] = logReg_Newton(x, y, C, eps, ksi, eta)
 		
 		% Update 
 		w = w + ak * s;
-		outter_iter = outter_iter + 1;
 		%fprintf('\n');
 		e = cputime - t;
 
 		predict = sign(x * w);
 		accuracy = sum(predict == y) / n;
 
-		fprintf(fileID, formatSpec, outter_iter, accuracy, fval, ak, inner_iter, e);
+		fprintf(fileID, formatSpec, outter_iter, fval, normsq_gw, inner_iter, ak, e);
+		outter_iter = outter_iter + 1;
 	end
 	e = cputime - t;
 	fclose(fileID);
